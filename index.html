@@ -1,0 +1,65 @@
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8">
+		<title>App Pesquisa Endereço</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script type="text/javascript">
+		function getDadosEnderecoPorCEP(cep){
+			let url = 'http://viacep.com.br/ws/'+cep+'/json/unicode/';
+			//console.log(url);
+
+			let xmlhttp = new XMLHttpRequest();
+			
+			xmlhttp.open('GET', url);
+			xmlhttp.onreadystatechange = function(){
+				if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+					let dadosJSONtext = xmlhttp.responseText;
+					let dadosJSONobj = JSON.parse(dadosJSONtext);
+					document.getElementById('endereco').value = dadosJSONobj.logradouro;
+					document.getElementById('bairro').value = dadosJSONobj.bairro;
+					document.getElementById('cidade').value = dadosJSONobj.localidade;
+					document.getElementById('uf').value = dadosJSONobj.uf;
+				}if(xmlhttp.readyState == 4 && xmlhttp.status == 404){
+					console.log('ocorreu um erro de requisição');
+				}
+			}
+			xmlhttp.send();
+		}
+
+</script>
+	</head>
+	<body>
+		
+		<nav class="navbar navbar-light bg-light mb-4">
+			<div class="container">
+				<div class="navbar-brand mb-0 h1">
+					<h3>App Pesquisa Endereço</h3>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			<div class="row form-group">
+				<div class="col-sm-3">
+					<input type="text" class="form-control" placeholder="CEP" onblur="getDadosEnderecoPorCEP(this.value)"/>
+				</div>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" placeholder="Endereço" readonly  id="endereco" />
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="bairro" placeholder="Bairro" readonly />
+				</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="cidade" placeholder="Cidade" readonly />
+				</div>
+
+				<div class="col-sm-2">
+					<input type="text" class="form-control" id="uf" placeholder="UF" readonly />
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
